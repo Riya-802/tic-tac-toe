@@ -1,0 +1,71 @@
+:root{
+  /* max cell size; will scale down on smaller screens */
+  --board-max: 420px;
+  --gap: 10px;
+  --line-color: #dc3545; /* Bootstrap danger */
+  --cell-border: #0d6efd; /* Bootstrap primary */
+}
+
+body {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.board-wrapper{
+  position: relative;
+  width: min(92vw, var(--board-max));
+  /* maintain square using aspect-ratio */
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+}
+
+.game-board{
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: var(--gap);
+}
+
+.cell{
+  background: #fff;
+  border: 3px solid var(--cell-border);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  cursor: pointer;
+  user-select: none;
+  transition: background .2s ease;
+  /* Responsive font size scales with board size */
+  font-size: clamp(1.6rem, 8vw, 3rem);
+}
+.cell:hover{ background:#e7f1ff; }
+.cell.taken{ pointer-events: none; }
+.cell.win { background: #fff3cd; } /* highlight winning cells */
+
+.winner-line{
+  position: absolute;
+  height: 8px;
+  background: var(--line-color);
+  border-radius: 8px;
+  transform-origin: left center;
+  /* We’ll animate using scaleX */
+  /* Start state is set via JS: rotate(...) scaleX(0) */
+}
+.winner-line.animate{
+  transition: transform 450ms ease-out;
+  /* End state is set via JS: rotate(...) scaleX(1) */
+}
+
+/* Small screens: reduce gaps a bit */
+@media (max-width: 420px){
+  :root{ --gap: 8px; }
+}
+
+/* Very small screens */
+@media (max-width: 340px){
+  :root{ --gap: 6px; }
+  .cell{ border-width: 2px; }
+}
